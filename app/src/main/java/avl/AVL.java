@@ -41,8 +41,34 @@ public class AVL {
   /* insert w into the tree rooted at n, ignoring balance
    * pre: n is not null */
   private void bstInsert(Node n, String w) {
-    // TODO
+    int comparisonValue = w.compareTo(n.word);
+
+    if (comparisonValue == 0)
+    {
+      return;
+    }
+
+    if (comparisonValue < 0) { // Base Case: insert to left if empty
+      if (n.left == null) {
+        n.left = new Node(w, n);
+        size++;
+      }
+      else { // Recursion: go left
+        bstInsert(n.left, w);
+      }
+    }
+    else if (comparisonValue > 0) { // Base Case: insert to right if empty
+      if (n.right == null) {
+        n.right = new Node(w, n);
+        size++;
+      }
+      else { // Recursion: go right
+        bstInsert(n.right, w);
+      }
+    }
+
   }
+
 
   /** insert w into the tree, maintaining AVL balance
   *  precondition: the tree is AVL balanced and any prior insertions have been
@@ -57,16 +83,82 @@ public class AVL {
     // TODO
   }
 
+  /** recalculate the height of node n
+   * precondition: n is not null
+   * postcondition: n.height is updated based on its children's heights */
+  private void recalculateHeight(Node n) {     // Using The Formula Provided in L10B
+    int leftHeight;
+    if (n.left == null) {
+      leftHeight = -1;
+    }
+    else {
+      leftHeight = n.left.height;
+    }
+
+    int rightHeight;
+    if (n.right == null) {
+      rightHeight = -1;
+    }
+    else {
+      rightHeight = n.right.height;
+    }
+
+    n.height = 1 + Math.max(leftHeight, rightHeight);
+  }
+
   /** do a left rotation: rotate on the edge from x to its right child.
-  *  precondition: x has a non-null right child */
-  public void leftRotate(Node x) {
-    // TODO
+   *  precondition: x has a non-null right child
+   *  postcondition: the subtree rooted at x is rotated left */
+  public void leftRotate(Node x) { // Burrowed from textbook psuedocode in L10C
+    Node y = x.right;
+    x.right = y.left;
+    if (y.left != null) {
+      y.left.parent = x;
+    }
+
+    y.parent = x.parent;
+    if (x.parent == null) {
+      root = y;
+    }
+    else if (x == x.parent.left) {
+      x.parent.left = y;
+    }
+    else {
+      x.parent.right = y;
+    }
+
+    y.left = x;
+    x.parent = y;
+
+    recalculateHeight(x);
+    recalculateHeight(y);
   }
 
   /** do a right rotation: rotate on the edge from x to its left child.
-  *  precondition: y has a non-null left child */
-  public void rightRotate(Node y) {
-    // TODO
+   *  precondition: x has a non-null left child
+   *  postcondition: the subtree rooted at x is rotated right */
+  public void rightRotate(Node x) {
+    // Using The Formula Provided in L10B
+    Node y = x.left;
+    x.left = y.right;
+    if (y.right != null) {
+      y.right.parent = x;
+    }
+
+    y.parent = x.parent;
+    if (x.parent == null) {
+      root = y;
+    } else if (x == x.parent.left) {
+      x.parent.left = y;
+    } else {
+      x.parent.right = y;
+    }
+
+    y.right = x;
+    x.parent = y;
+
+    recalculateHeight(x);
+    recalculateHeight(y);
   }
 
   /** rebalance a node N after a potentially AVL-violoting insertion.
