@@ -1,3 +1,7 @@
+/** Author: Brandon Connely
+ * Date: 7/22/25
+ * Purpose: A2 for CSCI 241 Class
+ */
 package avl;
 
 import java.util.Scanner;
@@ -49,10 +53,16 @@ public class Unique {
       return seen.size();
     }
 
-    /** Return the number of unique lines availble to be read by sc */ 
+    /** Return the number of unique lines available to be read by sc */
     private static int avlUnique(Scanner sc) {
-      // TODO - implement this; its runtime should be O(n log n)
-      return 0; // placeholder, so code compiles
+        AVL tree = new AVL();
+        while (sc.hasNextLine()) {
+            String line = sc.nextLine();
+            if (tree.search(line) == null) { //Skip Duplicates
+                tree.avlInsert(line);
+            }
+        }
+        return tree.getSize();
     }
 
 

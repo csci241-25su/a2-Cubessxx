@@ -1,3 +1,7 @@
+/** Author: Brandon Connely
+ * Date: 7/22/25
+ * Purpose: A2 for CSCI 241 Class
+ */
 package avl;
 
 public class AVL {
@@ -74,16 +78,48 @@ public class AVL {
   *  precondition: the tree is AVL balanced and any prior insertions have been
   *  performed by this method. */
   public void avlInsert(String w) {
-    // TODO
+    if (root == null) {
+      root = new Node(w);
+      size = 1;
+    }
+    else {
+      avlInsert(root, w);
+    }
   }
+
 
   /* insert w into the tree, maintaining AVL balance
    *  precondition: the tree is AVL balanced and n is not null */
   private void avlInsert(Node n, String w) {
-    // TODO
+    int compareValue = w.compareTo(n.word);
+
+    if (compareValue == 0) { // Base Case
+      return;
+    }
+
+    if (compareValue < 0) {
+        if (n.left == null) {
+        n.left = new Node(w, n);
+        size++;
+      }
+      else {
+        avlInsert(n.left, w);
+      }
+    }
+    else {
+      if (n.right == null) {
+        n.right = new Node(w, n);
+        size++;
+      }
+      else {
+        avlInsert(n.right, w);
+      }
+    }
+
+    rebalance(n);
   }
 
-  /** recalculate the height of node n
+  /** HELPER METHOD: recalculate the height of node n
    * precondition: n is not null
    * postcondition: n.height is updated based on its children's heights */
   private void recalculateHeight(Node n) {     // Using The Formula Provided in L10B
@@ -161,10 +197,53 @@ public class AVL {
     recalculateHeight(y);
   }
 
+  /** HELPER METHOD: Return the balance of a given node.
+   * postcondition: returns: Child(Right) Height - Child(Left) Height
+   */
+  private int getBalance(Node n) {
+
+    int leftHeight = 0;
+    if (n.left == null) { //Convention
+      leftHeight = -1;
+    }
+    else {
+      leftHeight = n.left.height;
+    }
+
+    int rightHeight = 0;
+    if (n.right == null) { //Convention
+      rightHeight = -1;
+    }
+    else {
+      rightHeight = n.right.height;
+    }
+
+    return rightHeight - leftHeight;
+  }
+
   /** rebalance a node N after a potentially AVL-violoting insertion.
   *  precondition: none of n's descendants violates the AVL property */
   public void rebalance(Node n) {
-    // TODO
+    recalculateHeight(n);
+    int balance = getBalance(n);
+
+    if (balance < -1) {
+      if (getBalance(n.left) < 0) { // Case 1
+        rightRotate(n);
+      }
+      else { // Case 2
+        leftRotate(n.left);
+        rightRotate(n);
+      }
+    } else if (balance > 1) {
+      if (getBalance(n.right) < 0) { //Case 3
+        rightRotate(n.right);
+        leftRotate(n);
+      }
+      else { // Case 4
+        leftRotate(n);
+      }
+    }
   }
 
   /** remove the word w from the tree */
