@@ -1,6 +1,6 @@
 /** Author: Brandon Connely
  * Date: 7/22/25
- * Purpose: A2 for CSCI 241 Class
+ * Purpose: A2
  */
 package avl;
 
@@ -58,7 +58,7 @@ public class Unique {
         AVL tree = new AVL();
         while (sc.hasNextLine()) {
             String line = sc.nextLine();
-            if (tree.search(line) == null) { //Skip Duplicates
+            if (tree.search(line) == null) { // Skip Duplicates
                 tree.avlInsert(line);
             }
         }

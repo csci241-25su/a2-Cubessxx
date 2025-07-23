@@ -1,6 +1,6 @@
 /** Author: Brandon Connely
  * Date: 7/22/25
- * Purpose: A2 for CSCI 241 Class
+ * Purpose: A2
  */
 package avl;
 
@@ -122,7 +122,7 @@ public class AVL {
   /** HELPER METHOD: recalculate the height of node n
    * precondition: n is not null
    * postcondition: n.height is updated based on its children's heights */
-  private void recalculateHeight(Node n) {     // Using The Formula Provided in L10B
+  private void recalculateHeight(Node n) {  // Using The Formula Provided in L10B
     int leftHeight;
     if (n.left == null) {
       leftHeight = -1;
@@ -173,8 +173,7 @@ public class AVL {
   /** do a right rotation: rotate on the edge from x to its left child.
    *  precondition: x has a non-null left child
    *  postcondition: the subtree rooted at x is rotated right */
-  public void rightRotate(Node x) {
-    // Using The Formula Provided in L10B
+  public void rightRotate(Node x) { // Using The Formula Provided in L10B
     Node y = x.left;
     x.left = y.right;
     if (y.right != null) {
@@ -203,7 +202,7 @@ public class AVL {
   private int getBalance(Node n) {
 
     int leftHeight = 0;
-    if (n.left == null) { //Convention
+    if (n.left == null) { // Convention
       leftHeight = -1;
     }
     else {
@@ -211,7 +210,7 @@ public class AVL {
     }
 
     int rightHeight = 0;
-    if (n.right == null) { //Convention
+    if (n.right == null) { // Convention
       rightHeight = -1;
     }
     else {
@@ -236,7 +235,7 @@ public class AVL {
         rightRotate(n);
       }
     } else if (balance > 1) {
-      if (getBalance(n.right) < 0) { //Case 3
+      if (getBalance(n.right) < 0) { // Case 3
         rightRotate(n.right);
         leftRotate(n);
       }
